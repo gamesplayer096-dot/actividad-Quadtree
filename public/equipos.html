@@ -1,0 +1,13 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>QUADTREE ARENA · Equipos</title><link rel="stylesheet" href="/style.css"><script src="/socket.io/socket.io.js"></script><script src="/common.js"></script></head><body>
+<header><div><h1>QUADTREE ARENA</h1><p>Organiza la partida y prepara los tres equipos.</p></div><nav class="topnav"><a href="/equipos.html">Equipos</a><a href="/proyector.html">Proyector</a><a href="/jugador.html">Jugador</a></nav></header>
+<main>
+<div class="panel"><h2>Crear una partida nueva</h2><p class="sub">Se crearán Alfa, Beta y Gamma, cada uno con cuatro puestos: NO, NE, SO y SE.</p><button id="create">Crear partida y generar código</button>
+<div id="createdInfo" class="hidden" style="margin-top:18px"><div class="muted">Código para compartir</div><div class="code" id="roomCode"></div><p class="muted">Comparte este código con todos los jugadores y con el proyector.</p><div class="links"><a id="teamsLink">Administrar equipos</a><a id="projectorLink">Abrir proyector</a><a id="playerLink">Abrir acceso de jugadores</a></div><p class="muted" id="createdUrl"></p></div><div id="notice"></div></div>
+<div class="panel"><h2>Entrar a una partida existente</h2><p class="sub">Si ya tienes un código, úsalo para ver el estado de los equipos.</p><div class="toolbar"><div class="field"><label>Código de sala</label><input id="code" placeholder="Ej. A1B2C3" value=""></div><button id="enter">Ver equipos</button></div><div id="teamList" class="grid3"></div></div>
+<div class="panel"><h2>Cómo se juega</h2><p class="muted">Cada equipo construye su propio Quadtree. Cada jugador se encarga de su cuadrante inicial y de todas las subdivisiones que salgan de él. El equipo suma puntos por las respuestas correctas.</p></div>
+</main><script>
+document.getElementById("create").onclick=()=>socket.emit("createRoom",{});
+document.getElementById("enter").onclick=()=>joinViewer("admin");
+if(codeFromUrl){document.getElementById("code").value=codeFromUrl;joinViewer("admin")}
+function renderPage(){if(!state)return;document.getElementById("teamList").innerHTML=state.teams.map(t=>`<div class="teamcard"><h3>Equipo ${t.name} · ${t.points} pts</h3><div class="slots">${["NO","NE","SO","SE"].map(r=>{let p=t.players[r];return `<div class="slot"><b>${r}</b><span>${p?`${p.name} · <i class="${p.online?"online":"offline"}">${p.online?"En línea":"Desconectado"}</i>`:"Vacante"}</span></div>`}).join("")}</div></div>`).join("")}
+</script></body></html>

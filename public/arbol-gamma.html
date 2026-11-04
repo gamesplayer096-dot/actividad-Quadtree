@@ -1,0 +1,9 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Árbol Quadtree · Equipo Gamma</title><link rel="stylesheet" href="/style.css"><script src="/socket.io/socket.io.js"></script><script src="/common.js"></script><script defer src="/arbol.js"></script></head><body>
+<header><div><h1>QUADTREE ARENA</h1><p>Árbol Quadtree · Equipo Gamma</p></div><nav class="topnav"><a href="/equipos.html">Equipos</a><a href="/proyector.html">Proyector</a><a href="/jugador.html">Jugador</a></nav></header>
+<main><div class="toolbar"><div class="field"><label>Código de sala</label><input id="code" placeholder="Código de partida"></div><button id="connect">Conectar árbol</button></div><div id="notice"></div><div class="stats"><div class="statbox"><small>Puntaje</small><strong id="score">0</strong></div><div class="statbox"><small>Pendientes</small><strong id="pending">0</strong></div><div class="statbox"><small>Hojas</small><strong id="leaves">0</strong></div></div><div class="panel"><h2>Construcción del árbol</h2><p class="sub">El árbol se actualiza en vivo. Los nodos rojos indican decisiones incorrectas; las ramas reflejan las decisiones que tomó el equipo.</p><div id="treeView" class="canvas"></div><div class="legend"><span>🟦 Nodo interno: subdividido</span><span>🟩 Hoja: homogénea según respuesta</span><span>🟥 Error: decisión incorrecta</span></div></div></main>
+<script>
+const TEAM_INDEX=2;
+document.getElementById("connect").onclick=()=>joinViewer("tree");
+if(codeFromUrl){document.getElementById("code").value=codeFromUrl;joinViewer("tree")}
+function renderPage(){if(!state)return;renderTree(state.teams[TEAM_INDEX]);}
+</script></body></html>
